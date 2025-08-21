@@ -72,7 +72,7 @@ After completion deployment, you can get following values. And then please note 
 
 ### 3. Deploy AgentCore Runtime
 
-At first, please confirm Bedrock model ID either you want to use at [assets/agent/main.py](./assets/agent/main.py#L9). You can see supported foundation model IDs in [AWS document]](https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html).
+At first, please confirm Bedrock model ID either you want to use at [assets/agent/main.py](./assets/agent/main.py#L9). You can see supported foundation model IDs in [AWS document](https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html).
 
 ```python
 model = BedrockModel(model_id="anthropic.claude-3-5-sonnet-20240620-v1:0", region_name=REGION)
@@ -87,10 +87,14 @@ uv sync
 source .venv/bin/activate
 ```
 
+Intall the AgentCore tool kit.
+
 ```bash
 uv add --dev bedrock-agentcore-starter-toolkit
 uv sync
 ```
+
+Next, use the `configure` command once to generate a configuration file.
 
 ```bash
 AWS_REGION=...         # AWS region
@@ -107,7 +111,9 @@ agentcore configure \
   --ecr ${ECR_REPOSITORY_URI}
 ```
 
-after that you can get `Dockerfile` and `.bedrock-agentcore.yaml`
+After that you'll get `Dockerfile` and `.bedrock-agentcore.yaml`.
+
+Finally, you'll deploy using `launch` command.
 
 ```bash
 agentcore launch
@@ -119,7 +125,7 @@ After completion deployment, you can get `Agent ARN` like following:
 Agent ARN: arn:aws:bedrock-agentcore:us-east-1:123456789012:runtime/XXXXX-xxxxxxxxxx
 ```
 
-### 4. Configure Context
+### 4. Configure CDK Context
 
 ```bash
 cd ../../
@@ -137,14 +143,14 @@ Create or update `cdk.context.json` at project root with your AgentCore ARN:
 }
 ```
 
-> [!NOTE]
-> This deployment will update the Lambda environment variables and execution role with the ARN of AgentCore.
-
 ### 5. Re-deploy AWS Resources (For Update)
 
 ```bash
 cdk deploy
 ```
+
+> [!NOTE]
+> This deployment will update the Lambda environment variables and execution role with the ARN of AgentCore.
 
 ## How to Demo
 
@@ -155,16 +161,18 @@ curl -X POST https://dxxxxxxxxxxxxx.cloudfront.net/ \
   -d '{"prompt":"hello world!"}'
 ```
 
-The second format uses Lambda to transform the response from AgentCore Runtime. It takes out only the text that the LLM response and sends it as a stream. It also adds the `runtimeSessionId` from AgentCore Runtime at the end of the output.
+The second format uses Lambda to transform the response from AgentCore Runtime using `"response":"transformed"` option. It takes out only the text that the LLM response and sends it as a stream. It also adds the `runtimeSessionId` from AgentCore Runtime at the end of the output.
 
 ```bash
 curl -X POST https://dxxxxxxxxxxxxx.cloudfront.net/ \
   -d '{"prompt":"hello world!", "response":"transformed"}'
 ```
 
-Example Each Responses:
+Please refer to [assets/functions/request-handler/handler.ts](https://github.com/msysh/agentcore-and-lambda-stream-response/blob/0ecb8357c30df6997e32de14d1c42dc7ae85c132/assets/functions/request-handler/handler.ts#L58-L78) for the specific implementation details of each function.
 
-* Original stream response
+### Example Each Responses:
+
+* Keep original stream response
   ```
   curl -X POST https://dxxxxxxxxxxxxx.cloudfront.net/ -d '{"prompt":"hello"}'
 
