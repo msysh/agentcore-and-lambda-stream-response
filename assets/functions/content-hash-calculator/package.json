@@ -1,0 +1,8 @@
+{
+  "name": "content-hash-calculator",
+  "version": "0.1.0",
+  "scripts": {},
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.152"
+  }
+}

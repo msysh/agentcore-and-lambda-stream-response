@@ -1,0 +1,5 @@
+{
+  "agentcore-lambda-stream-response": {
+    "agentArn": "arn:aws:bedrock-agentcore:${REION}:${ACCOUNT_ID}:runtime/${AGENT_RUNTIME_ID}"
+  }
+}

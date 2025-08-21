@@ -1,0 +1,11 @@
+{
+  "name": "request-handler",
+  "version": "0.1.0",
+  "scripts": {},
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.152"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-agentcore": "^3.864.0"
+  }
+}
